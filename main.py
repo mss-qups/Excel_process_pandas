@@ -13,7 +13,6 @@ output_list_df = pd.DataFrame(
      list(data_part["Output"]) if str(x) != 'nan'])
 mfi_list_df = pd.DataFrame([x for x in list(data_part["MFI"]) if str(x) != 'nan'])
 mfo_list_df = pd.DataFrame([x for x in list(data_part["MFO"]) if str(x) != 'nan'])
-
 input_mf = input_list_df * mfi_list_df
 output_mf = output_list_df * mfo_list_df
 total = input_mf + output_mf
@@ -22,4 +21,4 @@ total = input_mf + output_mf
 file["Input(MF)"] = list(input_mf[0])
 file["Output(MF)"] = list(output_mf[0])
 file["Total"] = list(total[0])
-file.to_excel(f"./{file_path}new.xlsx", index=False)
+file.to_excel(f"./DATA_SS/{file_path}.xlsx", index=False)
