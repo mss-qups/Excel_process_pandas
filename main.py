@@ -1,11 +1,13 @@
 import pandas as pd
 from openpyxl import load_workbook
+import xlsxwriter
+
 file_path = "VMCR_load_report_100_participant_8_10"
 wb = load_workbook(file_path + '.xlsx')
 xls = pd.ExcelFile(file_path + '.xlsx')
 sheets = wb.sheetnames
 
-
+dfs = []
 for sheet in sheets:
     df = pd.read_excel(xls, sheet)
     if "MFI" and "MFO" in list(df.head()):
@@ -25,6 +27,9 @@ for sheet in sheets:
         df["Input(MF)"] = list(input_mf[0])
         df["Output(MF)"] = list(output_mf[0])
         df["Total"] = list(total[0])
+        dfs.append(df)
+    else:
+        dfs.append(pd.read_excel(xls, sheet))
 
         # # write to excel
         # df.to_excel(f"./DATA_SS/{file_path}_processed.xlsx", index=False)
@@ -32,6 +37,8 @@ for sheet in sheets:
         # df.to_excel(writer, sheet_name=sheet)
         # writer.save()
         # Create a Pandas Excel writer using XlsxWriter as the engine.
-        with pd.ExcelWriter('./DATA_SS/'+file_path+'_processed.xlsx', engine='openpyxl', mode='a') as writer:
-            # Write each dataframe to a different worksheet.
-            df.to_excel(writer, sheet_name=sheet)
+print(len(dfs))
+Excelwriter = pd.ExcelWriter("languages_multiple.xlsx", engine="xlsxwriter")
+for i, df in enumerate(dfs):
+    df.to_excel(Excelwriter, sheet_name=sheets[i], index=False)
+Excelwriter.save()
